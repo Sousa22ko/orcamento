@@ -1,0 +1,29 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exemplo de Iframe</title>
+</head>
+<body>
+    <button onclick="carregarPagina()">Abrir Página</button>
+    <iframe id="myIframe" width="800" height="600"></iframe>
+
+    <script>
+        function carregarPagina() {
+            // URL da página que você deseja carregar no iframe
+            const url = 'http://localhost/orcamento/procura_despesa_apagar.php';
+
+            // Obtém o elemento iframe pelo ID
+            const iframe = document.getElementById('myIframe');
+
+            // Define a URL do iframe
+            iframe.src = url;
+        }
+    </script>
+    
+    
+</body>
+</html>
+
