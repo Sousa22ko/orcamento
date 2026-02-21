@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./styles.css">
+    <title>Orcamento</title>
+</head>
+
+
+<body class="font-family: 'Dancing Script', cursive;">
+
+    <nav class="navbar navbar-expand-sm bg-beige navbar-dark">
+        <a class="navbar-brand" href="#" style="color: black;">Controle Orçamentário</a>
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
+            aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav ml-auto">
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown2" role="button"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">p
+                        Receita</a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+
+                        <a class="dropdown-item" href="javascript:void(0)"
+                            onclick="carregarPagina('/inclui_receita.php');">Incluir</a>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Despesa</a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="javascript:void(0)"
+                            onclick="carregarPagina('/inclui_despesa.php');">Incluir</a>
+                        <a class="dropdown-item" href="javascript:void(0)"
+                            onclick="carregarPagina('/telanova2.php');">Alterar/Excluir</a>
+                        <a class="dropdown-item" href="javascript:void(0)"
+                            onclick="carregarPagina('/pesquisar_campo.php');">Pesquisar</a>
+                        <a class="dropdown-item" href="javascript:void(0)"
+                            onclick="carregarPagina('/procura_desp_pagar.php');">Registrar
+                            PG</a>
+                        <a class="dropdown-item" href="javascript:void(0)"
+                            onclick="carregarPagina('/tela_nova3.html');">Grafico</a>
+                        <a class="dropdown-item" href="javascript:void(0)"
+                            onclick="carregarPagina('/configura_slider.php');">Configurações</a>
+                <li class="nav-item">
+                    <a class="nav-link" href="javascript:void(0)" onclick="carregarPagina('/telanova2.php');">Consulta
+                        Mes</a>
+                </li>
+
+            </ul>
+        </div>
+    </nav>
+
+    <div class="content">
+        <iframe id='myIframe' style="border:none;"></iframe>
+    </div>
+
+
+
+    <!-- ============================================================= -->
+    <!-- ========================== SCRIPTS ========================== -->
+    <!-- ============================================================= -->
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="./generic.js"></script> <!-- scripts genericos -->
+    <script>
+        function mostrarPopupSeNecessario() {
+            const hoje = new Date().toISOString().slice(0, 10);
+            const ultimaVisita = localStorage.getItem('popupData');
+
+            if (ultimaVisita !== hoje) {
+                carregarPagina('/verifica_vencimento.php');
+            }
+        }
+
+        carregarPagina('/home/fundo.html')
+        //window.onload = mostrarPopupSeNecessario();
+    </script>
+</body>
+
+</html>
