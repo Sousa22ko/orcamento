@@ -207,7 +207,7 @@ $salario = 0;
 
 $sqlReceita = "SELECT receita FROM receita WHERE ocorrencia = ?";
 $stmt = $conn->prepare($sqlReceita);
-$stmt->execute(params: [$mesAno]);
+$stmt->execute();
 
 $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -233,7 +233,7 @@ ORDER BY despesa.id_descricao ASC, despesa.valor DESC
 ";
 
 $stmt = $conn->prepare($sql);
-$stmt->execute(params: [$mesAno]);
+$stmt->execute();
 $despesas = $stmt->fetchAll(PDO::FETCH_ASSOC);
 $stmt->closeCursor();
 
@@ -369,6 +369,7 @@ foreach ($despesas as $d) {
             <div class='despesa' style='text-align:left;'>{$d['nome_categoria']}</div>
             <div>" . date("d/m/Y", strtotime($d["vencimento"])) . "</div>
             <div>{$statusPago}</div>
+
         </div>";
 
             $subtotalDescricao += $d['valor'];
