@@ -185,12 +185,11 @@ body {
 
 
 <?php
+include '../api/dbConnection.php';
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-require_once "config.php";
-require_once "functions.inc";
 
 setlocale(LC_TIME, 'pt_BR.UTF-8');
 
@@ -199,10 +198,7 @@ if (!$mesAno) {
     exit("Ocorrência não informada");
 }
 
-$conn = conectar();
-if ($conn->connect_error) {
-    die("Erro na conexão: " . $conn->connect_error);
-}
+$conn = getDBConnection();
 
 /* =====================================================
    BUSCA RECEITA
@@ -211,15 +207,14 @@ $salario = 0;
 
 $sqlReceita = "SELECT receita FROM receita WHERE ocorrencia = ?";
 $stmt = $conn->prepare($sqlReceita);
-$stmt->bind_param("s", $mesAno);
-$stmt->execute();
-$res = $stmt->get_result();
+$stmt->execute(params: [$mesAno]);
 
-if ($res->num_rows > 0) {
-    $row = $res->fetch_assoc();
+$row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+if ($row) {
     $salario = $row['receita'];
 }
-$stmt->close();
+$stmt->closeCursor();
 
 /* =====================================================
    BUSCA DESPESAS
@@ -238,11 +233,9 @@ ORDER BY despesa.id_descricao ASC, despesa.valor DESC
 ";
 
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("s", $mesAno);
-$stmt->execute();
-$result = $stmt->get_result();
-$despesas = $result->fetch_all(MYSQLI_ASSOC);
-$stmt->close();
+$stmt->execute(params: [$mesAno]);
+$despesas = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$stmt->closeCursor();
 
 /* =====================================================
    VARIÁVEIS DE CONTROLE

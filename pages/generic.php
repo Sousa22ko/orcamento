@@ -7,8 +7,7 @@ $mes = substr($hoje, 3, 2);
 $ano = substr($hoje, 8, 2);
 $ocorrencia = ($ano . $mes);
 
-function diffToday($data)
-{
+function diffToday($data) {
     $hoje = new DateTime();
     $diferenca = $hoje->diff($data);
     return ($diferenca->format('%r%a dias'));
