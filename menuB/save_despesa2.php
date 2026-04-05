@@ -1,6 +1,6 @@
 <?
-require ("config.php");
-require ("functions.inc");
+require("config.php");
+require("functions.inc");
 
 // echo "<pre>";
 //     var_dump($_POST);
@@ -27,10 +27,12 @@ $valido = ($_POST["valido"]);
 
 // Conexão com o banco
 //Função que conecta ao banco, já definida em seu config.php
-$conn=conectar();
+$conn = conectar();
 
 // Verifica se houve erro na conexão
-if ($conn->connect_error) {  die("Erro na conexão: " . $conn->connect_error);  }
+if ($conn->connect_error) {
+    die("Erro na conexão: " . $conn->connect_error);
+}
 
 
 // Query SQL para UPDATE
@@ -46,17 +48,18 @@ if (!$stmtA) {
 }
 
 // Associar os parâmetros corretamente
-$stmtA->bind_param("ssddssisssisi",
-    $despesa,  
-    $data, 
-    $valor,  
-    $valor_casa, 
-    $ocorrencia, 
+$stmtA->bind_param(
+    "ssddssisssisi",
+    $despesa,
+    $data,
+    $valor,
+    $valor_casa,
+    $ocorrencia,
     $parcela,
-    $id_descricao, 
+    $id_descricao,
     $vencimento,
-    $pago, 
-    $obs, 
+    $pago,
+    $obs,
     $categoria,
     $valido,
     $indice  // <- necessário para WHERE id_despesa = ?
@@ -80,12 +83,12 @@ if (isset($_FILES['pdf']) && $_FILES['pdf']['error'] === UPLOAD_ERR_OK) {
     $tipo = $_FILES['pdf']['type'];
     $tamanho = $_FILES['pdf']['size'];
     $conteudo = file_get_contents($_FILES['pdf']['tmp_name']);
-    
+
     // Verifique se já existe registro na tabela_imagens para essa despesa.
     // Se sim, pode fazer um UPDATE; se não, um INSERT.
     // Exemplo simples: usar INSERT com ON DUPLICATE KEY UPDATE,
     // supondo que o campo id_despesa_imagem seja UNIQUE.
-    
+
     $stmtB = $conn->prepare("INSERT INTO tabela_imagens (id_despesa_imagem, nome_imagem, tipo_imagem, tamanho_imagem, imagem)
                              VALUES (?, ?, ?, ?, ?)
                              ON DUPLICATE KEY UPDATE nome_imagem = VALUES(nome_imagem), 
@@ -93,27 +96,26 @@ if (isset($_FILES['pdf']) && $_FILES['pdf']['error'] === UPLOAD_ERR_OK) {
                              tamanho_imagem = VALUES(tamanho_imagem), 
                              imagem = VALUES(imagem)");
 
-                             if (!$stmtB) { die("Erro ao preparar o INSERT: " . $conn->error); }
-                             
-                             // O tipo para o campo de imagem deve ser 'b' para indicar Blob
-                             $null = NULL;
-                             $stmtB->bind_param("sssib", $indice, $nome, $tipo, $tamanho, $null);
-                             $stmtB->send_long_data(4, $conteudo);
-                             
-                             if ($stmtB->execute()) {
-                                // Sucesso no upload do PDF
-
-                                echo "Sucesso ao inserir o PDF: ";
-                            } else {
-                                echo "Erro ao inserir o PDF: " . $stmtB->error;
-                            }
-                        $stmtB->close();
+    if (!$stmtB) {
+        die("Erro ao preparar o INSERT: " . $conn->error);
     }
-        else {echo "Salvo!: ";
-                
-            }
- //////////////////////////////////////////////////////// incluir um novo pdf termino ///////////////////////////////////////
+
+    // O tipo para o campo de imagem deve ser 'b' para indicar Blob
+    $null = NULL;
+    $stmtB->bind_param("sssib", $indice, $nome, $tipo, $tamanho, $null);
+    $stmtB->send_long_data(4, $conteudo);
+
+    if ($stmtB->execute()) {
+        // Sucesso no upload do PDF
+
+        echo "Sucesso ao inserir o PDF: ";
+    } else {
+        echo "Erro ao inserir o PDF: " . $stmtB->error;
+    }
+    $stmtB->close();
+} else {
+    echo "Salvo!: ";
+
+}
+//////////////////////////////////////////////////////// incluir um novo pdf termino ///////////////////////////////////////
 ?>
-
-
-
