@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Filtro com Datepicker</title>
+    <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> -->
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+</head>
+
+<body>
+
+    <div class="container pt-4">
+
+        <div class="row">
+            <div class="col-md-2">
+                <div class='form-group'>
+                    <label for="datepicker">Mes e Ano: </label>
+                </div>
+            </div>
+
+            <div class="col-md-2">
+                <div class='form-group'>
+                    <input type="text" id="datepicker" class="form-control" placeholder="MM/YYYY">
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class='col-md-12' id="table-container">
+                    <!-- A tabela será atualizada aqui -->
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.pt-BR.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#datepicker').datepicker({
+                format: "mm/yyyy",
+                startView: "months",
+                minViewMode: "months",
+                language: "pt-BR",
+                autoclose: true
+            }).off('changeDate').on('changeDate', function (e) {
+                var date = $(this).val();
+
+                let temp = date.split('/');
+                date = "" + temp[1].substring(2) + "" + temp[0];
+                ajaxPHP(date);
+            });
+        });
+
+        function ajaxPHP(date) {
+            console.log("olaaaaaaaaa")
+            $.ajax({
+                url: './crud.php',
+                type: 'POST',
+                data: { buscaPHP: date },
+                success: function (response) {
+                    $('#table-container').html(response);
+                },
+                error: function (xhr, status, error) {
+                    console.error("Erro na requisição: " + error);
+                    $('#table-container').html('<div class="alert alert-danger">Erro ao carregar dados.</div>');
+                }
+            });
+        }
+    </script>
+
+</body>
+
+</html>

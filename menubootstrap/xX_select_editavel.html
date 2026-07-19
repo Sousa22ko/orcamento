@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Busca de Despesas</title>
+    
+    <!-- Inclui o CSS do Select2 -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+</head>
+<body>
+
+    <label for="despesa-select">Buscar Despesa:</label>
+    <select id="despesa-select" style="width: 300px;"></select>
+
+    <!-- Inclui o jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+    <!-- Inclui o JavaScript do Select2 -->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            // Inicializa o Select2 com busca remota (via AJAX)
+            $('#despesa-select').select2({
+                placeholder: 'Digite para buscar',
+                minimumInputLength: 1, // Mínimo de 1 caractere antes de realizar a busca
+                ajax: {
+                    url: 'select_editavel.php', // O caminho para o arquivo PHP que realizará a busca
+                    dataType: 'json',
+                    delay: 250, // Atraso de 250ms para evitar muitas requisições
+                    data: function(params) {
+                        return {
+                            searchTerm: params.term // O termo que o usuário digitou
+                        };
+                    },
+                    processResults: function(data) {
+                        return {
+                            results: $.map(data, function(item) {
+                                return {
+                                    id_despesa: item.id_despesa,
+                                    text: item.despesa
+                                };
+                            })
+                        };
+                    },
+                    cache: true
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>

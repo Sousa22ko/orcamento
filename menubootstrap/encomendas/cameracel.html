@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Teste da Câmera</title>
+</head>
+<body>
+  <h2>Teste de câmera no navegador</h2>
+  <video id="video" autoplay width="100%"></video>
+  <script>
+    navigator.mediaDevices.getUserMedia({ video: true })
+      .then(stream => {
+        document.getElementById('video').srcObject = stream;
+      })
+      .catch(err => alert("Erro: " + err));
+  </script>
+</body>
+</html>
